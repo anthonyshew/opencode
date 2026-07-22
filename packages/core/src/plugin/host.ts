@@ -360,6 +360,9 @@ export const make = Effect.fn("PluginHost.make")(function* (plugin: import("../p
       interrupt: (input) => runtime.session.interrupt(input.sessionID),
       wait: (input) => runtime.session.wait(input.sessionID),
     },
+    vcs: {
+      hook: (name, callback) => hooks.register("vcs", name, callback),
+    },
   } satisfies Plugin.Context
 })
 

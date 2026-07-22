@@ -13,6 +13,7 @@ import type { SessionDomain } from "./session.js"
 import type { ShellDomain } from "./shell.js"
 import type { SkillDomain } from "./skill.js"
 import type { ToolDomain } from "./tool.js"
+import type { VcsDomain } from "./vcs.js"
 import type { WebSearchDomain } from "./websearch.js"
 
 export interface Context {
@@ -30,6 +31,7 @@ export interface Context {
   readonly shell: ShellDomain
   readonly skill: SkillDomain
   readonly tool: ToolDomain
+  readonly vcs: VcsDomain
   readonly websearch: WebSearchDomain
 }
 

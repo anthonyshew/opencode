@@ -1202,9 +1202,14 @@ const Endpoint24_1 = (raw: RawClient["server.vcs"]) => (input?: Endpoint24_1Inpu
 
 const Endpoint24_2 = (raw: RawClient["server.vcs"]) => (input: Endpoint24_2Input) =>
   preserveEffect<Endpoint24_2Output>()(
-    raw["vcs.diff"]({ query: { location: input["location"], mode: input["mode"], context: input["context"] } }).pipe(
-      Effect.mapError(mapClientError),
-    ),
+    raw["vcs.diff"]({
+      query: {
+        location: input["location"],
+        mode: input["mode"],
+        sessionID: input["sessionID"],
+        context: input["context"],
+      },
+    }).pipe(Effect.mapError(mapClientError)),
   )
 
 const adaptGroup24 = (raw: RawClient["server.vcs"]) => ({

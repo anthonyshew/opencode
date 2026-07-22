@@ -13,11 +13,15 @@ import { AppProcess } from "@opencode-ai/util/process"
 import { Bus } from "./bus.js"
 import { VcsGit } from "./vcs/git.js"
 import { VcsHg } from "./vcs/hg.js"
+import { PluginHooks } from "./plugin/hooks.js"
+import { Session } from "@opencode-ai/schema/session"
+import { PluginSupervisor } from "./plugin/supervisor.js"
 
 export { FileStatus, Info, Mode }
 
 export interface DiffOptions {
   readonly context?: number
+  readonly sessionID?: Session.ID
 }
 
 export interface Interface {
@@ -44,6 +48,8 @@ const layer = Layer.effect(
     const fs = yield* FSUtil.Service
     const location = yield* Location.Service
     const bus = yield* Bus.Service
+    const hooks = yield* PluginHooks.Service
+    const plugins = yield* PluginSupervisor.Service
     const impl = adapter(proc, fs, location)
     const vcs = location.vcs
     const state = { info: impl ? yield* impl.info() : ({ branch: {} } satisfies Info) }
@@ -78,6 +84,21 @@ const layer = Layer.effect(
         return yield* impl.status()
       }),
       diff: Effect.fn("Vcs.diff")(function* (mode: Mode, options?: DiffOptions) {
+        if (options?.sessionID) {
+          yield* plugins.flush
+          const event = yield* hooks.trigger("vcs", "diff", {
+            sessionID: options.sessionID,
+            location: new Location.Info({
+              directory: location.directory,
+              workspaceID: location.workspaceID,
+              project: location.project,
+            }),
+            mode,
+            context: options.context,
+            result: undefined,
+          })
+          if (event.result !== undefined) return [...event.result]
+        }
         if (!impl) return []
         return yield* impl.diff(mode, options)
       }),
@@ -88,5 +109,5 @@ const layer = Layer.effect(
 export const node = makeLocationNode({
   service: Service,
   layer: layer,
-  deps: [AppProcess.node, FSUtil.node, Location.node, Bus.node],
+  deps: [AppProcess.node, FSUtil.node, Location.node, Bus.node, PluginHooks.node, PluginSupervisor.node],
 })

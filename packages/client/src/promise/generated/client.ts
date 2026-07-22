@@ -1749,7 +1749,12 @@ export function make(options: ClientOptions) {
           {
             method: "GET",
             path: `/api/vcs/diff`,
-            query: { location: input["location"], mode: input["mode"], context: input["context"] },
+            query: {
+              location: input["location"],
+              mode: input["mode"],
+              sessionID: input["sessionID"],
+              context: input["context"],
+            },
             successStatus: 200,
             declaredStatuses: [401, 400],
             empty: false,

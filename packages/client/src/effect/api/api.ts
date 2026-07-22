@@ -1557,6 +1557,7 @@ export type VcsStatusOperation<E = never> = (input?: Endpoint24_1Input) => Effec
 export type Endpoint24_2Input = {
   readonly location?: { readonly directory?: string | undefined; readonly workspace?: string | undefined } | undefined
   readonly mode: Vcs.Mode
+  readonly sessionID?: Session.ID | undefined
   readonly context?: number | undefined
 }
 export type Endpoint24_2Output = { readonly location: Location.Info; readonly data: ReadonlyArray<FileDiff.Info> }

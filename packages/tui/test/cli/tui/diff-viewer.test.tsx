@@ -37,6 +37,7 @@ test("closing the diff viewer returns to the route it opened from", async () => 
     expect(route.type === "plugin" ? route.data?.returnRoute : undefined).not.toBe(startRoute)
     expect(viewer.vcsDiffInput()).toEqual({
       location: { directory: "/repo/session" },
+      sessionID: "session-1",
       mode: "working",
       context: "12",
     })
@@ -64,6 +65,7 @@ test("uses the active location when opened outside a session", async () => {
   try {
     expect(viewer.vcsDiffInput()).toEqual({
       location: { directory: "/repo/default" },
+      sessionID: undefined,
       mode: "working",
       context: "12",
     })
@@ -156,6 +158,7 @@ async function renderDiffViewer(
     if (url.pathname !== "/api/vcs/diff") return
     vcsDiffInput = {
       location: { directory: url.searchParams.get("location[directory]") },
+      sessionID: url.searchParams.get("sessionID") ?? undefined,
       mode: url.searchParams.get("mode"),
       context: url.searchParams.get("context"),
     }
@@ -348,6 +351,7 @@ test("branch diff source requests branch VCS diff", async () => {
     })
     expect(viewer.vcsDiffInput()).toEqual({
       location: { directory: "/repo/session" },
+      sessionID: "session-1",
       mode: "branch",
       context: "12",
     })

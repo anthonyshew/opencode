@@ -264,6 +264,10 @@ export function fromPromise(plugin: Plugin) {
             hook: (name, callback) =>
               register(host.tool.hook(name, (event) => Effect.promise(() => Promise.resolve(callback(event))))),
           },
+          vcs: {
+            hook: (name, callback) =>
+              register(host.vcs.hook(name, (event) => Effect.promise(() => Promise.resolve(callback(event))))),
+          },
           websearch: {
             providers: adaptApiMethod(WebSearchEndpoints["websearch.providers"], host.websearch.providers),
             query: adaptApiMethod(WebSearchEndpoints["websearch.query"], host.websearch.query),

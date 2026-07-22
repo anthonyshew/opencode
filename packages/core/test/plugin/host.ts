@@ -98,6 +98,9 @@ export function host(overrides: Overrides = {}): Plugin.Context {
       transform: () => Effect.die("unused websearch.transform"),
       reload: () => Effect.die("unused websearch.reload"),
     },
+    vcs: overrides.vcs ?? {
+      hook: () => Effect.die("unused vcs.hook"),
+    },
     session: {
       hook: overrides.session?.hook ?? (() => Effect.die("unused session.hook")),
       create: overrides.session?.create ?? (() => Effect.die("unused session.create")),

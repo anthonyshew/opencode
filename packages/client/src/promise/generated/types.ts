@@ -5621,16 +5621,25 @@ export type VcsDiffInput = {
   readonly location?: {
     readonly location?: { readonly directory?: string | undefined; readonly workspace?: string | undefined } | undefined
     readonly mode: "working" | "branch"
+    readonly sessionID?: string | undefined
     readonly context?: number | undefined
   }["location"]
   readonly mode: {
     readonly location?: { readonly directory?: string | undefined; readonly workspace?: string | undefined } | undefined
     readonly mode: "working" | "branch"
+    readonly sessionID?: string | undefined
     readonly context?: number | undefined
   }["mode"]
+  readonly sessionID?: {
+    readonly location?: { readonly directory?: string | undefined; readonly workspace?: string | undefined } | undefined
+    readonly mode: "working" | "branch"
+    readonly sessionID?: string | undefined
+    readonly context?: number | undefined
+  }["sessionID"]
   readonly context?: {
     readonly location?: { readonly directory?: string | undefined; readonly workspace?: string | undefined } | undefined
     readonly mode: "working" | "branch"
+    readonly sessionID?: string | undefined
     readonly context?: number | undefined
   }["context"]
 }
