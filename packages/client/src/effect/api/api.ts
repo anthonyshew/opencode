@@ -1020,6 +1020,7 @@ type Endpoint25_1Request = Parameters<RawClient["server.vcs"]["vcs.diff"]>[0]
 export type Endpoint25_1Input = {
   readonly location?: Endpoint25_1Request["query"]["location"]
   readonly mode: Endpoint25_1Request["query"]["mode"]
+  readonly sessionID?: Endpoint25_1Request["query"]["sessionID"]
   readonly context?: Endpoint25_1Request["query"]["context"]
 }
 export type Endpoint25_1Output = EffectValue<ReturnType<RawClient["server.vcs"]["vcs.diff"]>>

@@ -435,5 +435,8 @@ export const make = Effect.fn("PluginHost.make")(function* (plugin: PluginV2.Int
       synthetic: runtime.session.synthetic,
       interrupt: (input) => runtime.session.interrupt(input.sessionID),
     },
+    vcs: {
+      hook: (name, callback) => hooks.register("vcs", name, callback),
+    },
   } satisfies Plugin.Context
 })

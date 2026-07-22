@@ -1223,12 +1223,18 @@ type Endpoint25_1Request = Parameters<RawClient["server.vcs"]["vcs.diff"]>[0]
 type Endpoint25_1Input = {
   readonly location?: Endpoint25_1Request["query"]["location"]
   readonly mode: Endpoint25_1Request["query"]["mode"]
+  readonly sessionID?: Endpoint25_1Request["query"]["sessionID"]
   readonly context?: Endpoint25_1Request["query"]["context"]
 }
 const Endpoint25_1 = (raw: RawClient["server.vcs"]) => (input: Endpoint25_1Input) =>
-  raw["vcs.diff"]({ query: { location: input["location"], mode: input["mode"], context: input["context"] } }).pipe(
-    Effect.mapError(mapClientError),
-  )
+  raw["vcs.diff"]({
+    query: {
+      location: input["location"],
+      mode: input["mode"],
+      sessionID: input["sessionID"],
+      context: input["context"],
+    },
+  }).pipe(Effect.mapError(mapClientError))
 
 const adaptGroup25 = (raw: RawClient["server.vcs"]) => ({ status: Endpoint25_0(raw), diff: Endpoint25_1(raw) })
 

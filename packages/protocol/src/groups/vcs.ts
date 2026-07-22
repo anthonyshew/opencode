@@ -2,6 +2,7 @@ import { FileDiff } from "@opencode-ai/schema/file-diff"
 import { Location } from "@opencode-ai/schema/location"
 import { NonNegativeInt } from "@opencode-ai/schema/schema"
 import { Vcs } from "@opencode-ai/schema/vcs"
+import { Session } from "@opencode-ai/schema/session"
 import { Schema } from "effect"
 import { HttpApiEndpoint, HttpApiGroup, OpenApi } from "effect/unstable/httpapi"
 import { LocationQuery, locationQueryOpenApi } from "./location.js"
@@ -9,6 +10,7 @@ import { LocationQuery, locationQueryOpenApi } from "./location.js"
 const DiffQuery = Schema.Struct({
   ...LocationQuery.fields,
   mode: Vcs.Mode,
+  sessionID: Session.ID.pipe(Schema.optional),
   context: Schema.NumberFromString.pipe(Schema.decodeTo(NonNegativeInt), Schema.optional),
 })
 

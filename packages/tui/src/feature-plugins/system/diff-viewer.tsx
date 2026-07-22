@@ -110,6 +110,7 @@ function DiffViewer(props: { context: Plugin.Context }) {
   const [diff] = createResource(diffInput, async (input) => {
     const result = await props.context.client.vcs.diff({
       location: input.location,
+      sessionID: input.sessionID,
       mode: input.mode,
       context: VCS_DIFF_CONTEXT_LINES,
     })
