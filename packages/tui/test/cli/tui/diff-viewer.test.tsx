@@ -31,14 +31,14 @@ test("closing the diff viewer returns to the route it opened from", async () => 
       type: "plugin",
       id: "diff-viewer",
       name: "diff",
-      data: { mode: "working", sessionID: "session-1", returnRoute: startRoute },
+      data: { mode: "branch", sessionID: "session-1", returnRoute: startRoute },
     })
     const route = viewer.current()
     expect(route.type === "plugin" ? route.data?.returnRoute : undefined).not.toBe(startRoute)
     expect(viewer.vcsDiffInput()).toEqual({
       location: { directory: "/repo/session" },
       sessionID: "session-1",
-      mode: "working",
+      mode: "branch",
       context: "12",
     })
 
