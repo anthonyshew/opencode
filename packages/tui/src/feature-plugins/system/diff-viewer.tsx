@@ -1079,7 +1079,7 @@ function Commands(props: { context: Plugin.Context }) {
             type: "plugin",
             name: ROUTE,
             data: {
-              mode: "working",
+              mode: route.type === "session" ? "branch" : "working",
               sessionID: route.type === "session" ? route.sessionID : undefined,
               returnRoute,
             },
