@@ -600,6 +600,7 @@ export default function Page() {
       [
         serverSDK.scope,
         "session-vcs",
+        controller.identity.params.id,
         sdk().directory,
         sync().data.vcs?.branch ?? "",
         sync().data.vcs?.default_branch ?? "",
@@ -617,17 +618,29 @@ export default function Page() {
       queryFn: mode
         ? () =>
             sdk()
-              .api.vcs.diff({ location: { directory: sdk().directory }, mode: mode === "git" ? "working" : mode })
+              .api.vcs.diff({
+                location: { directory: sdk().directory },
+                mode: mode === "git" ? "working" : mode,
+                sessionID: controller.identity.params.id,
+              })
               .then((result) => result.data)
+              .catch((error) => {
+                console.debug("[session-review] failed to load vcs diff", { mode, error })
+                return []
+              })
         : skipToken,
     }
   })
   const sessionDetailsQuery = createQuery(() => ({
-    queryKey: [serverSDK.scope, "session-details", sessionDirectory()] as const,
+    queryKey: [serverSDK.scope, "session-details", controller.identity.params.id, sessionDirectory()] as const,
     enabled: store.sessionDetailsOpen && serverSDK.connection.status() === "connected" && sync().project?.vcs === "git",
     queryFn: () =>
       sdk()
-        .api.vcs.diff({ location: { directory: sessionDirectory() }, mode: "working" })
+        .api.vcs.diff({
+          location: { directory: sessionDirectory() },
+          mode: "working",
+          sessionID: controller.identity.params.id,
+        })
         .then((result) => result.data)
         .catch((error) => {
           console.debug("[session-review] failed to load session details diff", { error })
@@ -637,7 +650,9 @@ export default function Page() {
   const sessionDetailsDiffs = () => (sessionDetailsQuery.isFetched ? (sessionDetailsQuery.data ?? []) : undefined)
   const refreshVcs = debounce(() => {
     void queryClient.invalidateQueries({ queryKey: vcsKey() })
-    void queryClient.invalidateQueries({ queryKey: [serverSDK.scope, "session-details", sessionDirectory()] })
+    void queryClient.invalidateQueries({
+      queryKey: [serverSDK.scope, "session-details", controller.identity.params.id, sessionDirectory()],
+    })
   }, 100)
   onCleanup(
     sdk().event.listen((event) => {
@@ -696,6 +711,7 @@ export default function Page() {
                 location: { directory: scope },
                 mode: mode === "git" ? "working" : mode,
                 context,
+                sessionID: controller.identity.params.id,
               })
               .then((result) => result.data),
         })
