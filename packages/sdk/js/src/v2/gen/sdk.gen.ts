@@ -8471,6 +8471,7 @@ export class Vcs2 extends HeyApiClient {
       } | null
       mode: VcsMode
       context?: string | null
+      sessionID?: string | null
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -8482,6 +8483,7 @@ export class Vcs2 extends HeyApiClient {
             { in: "query", key: "location" },
             { in: "query", key: "mode" },
             { in: "query", key: "context" },
+            { in: "query", key: "sessionID" },
           ],
         },
       ],

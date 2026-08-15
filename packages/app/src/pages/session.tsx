@@ -676,7 +676,7 @@ export default function Page() {
   })
   const vcsKey = createMemo(
     () =>
-      ["session-vcs", sdk().directory, sync().data.vcs?.branch ?? "", sync().data.vcs?.default_branch ?? ""] as const,
+      ["session-vcs", params.id, sdk().directory, sync().data.vcs?.branch ?? "", sync().data.vcs?.default_branch ?? ""] as const,
   )
   const vcsQuery = createQuery(() => {
     const mode = vcsMode()
@@ -688,8 +688,8 @@ export default function Page() {
       queryFn: mode
         ? () =>
             sdk()
-              .client.vcs.diff({ mode })
-              .then((result) => list(result.data))
+              .client.v2.vcs.diff({ mode: mode === "git" ? "working" : mode, sessionID: params.id })
+              .then((result) => list(result.data?.data))
               .catch((error) => {
                 console.debug("[session-review] failed to load vcs diff", { mode, error })
                 return []
@@ -736,8 +736,13 @@ export default function Page() {
           retry: 2,
           queryFn: () =>
             sdk()
-              .client.vcs.diff({ mode, directory: scope, context })
-              .then((result) => result.data ?? []),
+              .client.v2.vcs.diff({
+                mode: mode === "git" ? "working" : mode,
+                location: { directory: scope },
+                context: context?.toString(),
+                sessionID: params.id,
+              })
+              .then((result) => result.data?.data ?? []),
         })
         .then((diffs) => diffs.find((diff) => diff.file === file))
 

@@ -19224,6 +19224,7 @@ export type V2VcsDiffData = {
     } | null
     mode: VcsMode
     context?: string | null
+    sessionID?: string | null
   }
   url: "/api/vcs/diff"
 }
